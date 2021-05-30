@@ -26,6 +26,7 @@ const Addtransation = (props) => {
                 </div>
                 <button className="btn">Add transaction</button>
             </form>
+            <p style={{textAlign:'center'}}>Made with ❤️ by Kaushik Appani</p>
         </>
     )
 };

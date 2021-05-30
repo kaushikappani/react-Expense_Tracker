@@ -7,36 +7,44 @@ import AddTransaction from "./components/Addtransation";
 import './App.css';
 
 function App() {
-  const [list, setList] = useState([]);
-  const [income, setIncome] = useState(0);
-  const [expense, setExpense] = useState(0);
+  const [list, setList] = useState(localStorage.getItem('transactions')!==null ? JSON.parse(localStorage.getItem('transactions')): []);
 
+  const [income, setIncome] = useState(localStorage.getItem('income') !== null ? localStorage.getItem('income') : 0);
+  const [expense, setExpense] = useState(localStorage.getItem('expense') !== null ? localStorage.getItem('expense') : 0);
   const onSave = (text, amount) => {
     setList(preVal => {
+      localStorage.setItem('transactions', JSON.stringify([...preVal, {
+        text,
+        amount
+      }]))
       return [...preVal, {
         text,
         amount
       }]
     });
-    amount.trim(' ').charAt(0) !== "-" && setIncome(preVal => { return preVal + parseInt(amount) })
-    amount.trim(' ').charAt(0) === "-" && setExpense(preVal => { return preVal + parseInt(amount) })
+    amount.trim(' ').charAt(0) !== "-" && setIncome(preVal => {localStorage.setItem('income',parseInt(parseInt(preVal) + parseInt(amount))); return parseInt(preVal) + parseInt(amount) })
+    amount.trim(' ').charAt(0) === "-" && setExpense(preVal => {localStorage.setItem('expense',parseInt(parseInt(preVal) + parseInt(amount))); return parseInt(preVal) + parseInt(amount) })
     
   };
  
   function deleteHistory(id) {
-    list[id].amount.trim(' ').charAt(0) !== "-" && setIncome(preVal => { return preVal - parseInt(list[id].amount) })
-    list[id].amount.trim(' ').charAt(0) === "-" && setExpense(preVal => { return preVal - parseInt(list[id].amount) })
+    let trans = JSON.parse(localStorage.getItem('transactions'));
+    trans.splice(id, 1);
+    localStorage.setItem('transactions',JSON.stringify(trans))
+    list[id].amount.trim(' ').charAt(0) !== "-" && setIncome(preVal => {localStorage.setItem('income',parseInt(parseInt(preVal) - parseInt(list[id].amount))); return parseInt(preVal) - parseInt(list[id].amount) })
+    list[id].amount.trim(' ').charAt(0) === "-" && setExpense(preVal => {localStorage.setItem('expense',parseInt(parseInt(preVal) - parseInt(list[id].amount))); return parseInt(preVal) - parseInt(list[id].amount) })
     setList(prevNotes => {
       return prevNotes.filter((noteItem, index) => {
         return index !== id;
       });
     });
+    
   }
   return (
     <div>
       <Header />
       <div className="container">
-        <Balance balance={income+expense} />
+        <Balance balance={parseInt(income)+parseInt(expense)} />
         <Expences income={income} expense={expense} />
         <TransactionList data={list} onDeleteClicked={deleteHistory}/>
         <AddTransaction onSubmit={onSave} />
