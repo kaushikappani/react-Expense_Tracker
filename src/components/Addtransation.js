@@ -18,11 +18,11 @@ const Addtransation = (props) => {
             <form id="form" onSubmit={handleSubmit}>
                 <div className="form-control">
                     <label htmlFor="text">Text</label>
-                    <input onChange={(e)=>setText(e.target.value)} type="text" id="text" value={text} placeholder="Enter text..." />
+                    <input onChange={(e)=>setText(e.target.value)} type="text" id="text" value={text} placeholder="Enter text..." required />
                 </div>
                 <div className="form-control">
                     <label htmlFor="amount">Amount <br />(negative - expense, positive - income)</label>
-                    <input onChange={(e)=>setAmount(e.target.value)} type="number" id="amount" value={amount} placeholder="Enter amount..." />
+                    <input onChange={(e)=>setAmount(e.target.value)} type="number" id="amount" value={amount} placeholder="Enter amount..." required />
                 </div>
                 <button className="btn">Add transaction</button>
             </form>
